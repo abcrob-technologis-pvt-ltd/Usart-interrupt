@@ -1,0 +1,29 @@
+/*
+ * Usart_interrupt.c
+ *
+ * Created: 24-06-2019 22:15:30
+ * Author : ABCROB TECHNOLOGIES PRIVATE LIMITED
+ */ 
+#define F_CPU 8000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+char Data;
+ISR(USART_RXC_vect){
+	PORTB=UDR;
+}
+
+void usart_init(){
+	UBRRL=51;
+	UCSRC=(1<<URSEL)|(1<<UCSZ0)|(1<<UCSZ1);
+	UCSRB=(1<<RXEN)|(1<<TXEN)|(1<<RXCIE);
+}
+int main(void)
+{
+	DDRB=0xff;
+    usart_init();
+	sei();
+	PORTB = Data;
+	while(9);
+}
+
